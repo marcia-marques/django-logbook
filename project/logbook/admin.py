@@ -1,26 +1,17 @@
 from django.contrib import admin
 
-from .models import Flag, Event, EventFile, EventImage
+from .models import Flag, Event, EventFile
 
 
 class EventFileInline(admin.TabularInline):
     model = EventFile
 
 
-class EventImageInline(admin.TabularInline):
-    model = EventImage
-
-
 class EventAdmin(admin.ModelAdmin):
     inlines = [
         EventFileInline,
-        EventImageInline,
     ]
-    readonly_fields = ('author', 'created_on', 'updated_on')
-
-    def save_model(self, request, obj, form, change):
-        obj.author = request.user.first_name + ' ' + request.user.last_name
-        super().save_model(request, obj, form, change)
+    list_display = ('event_date', 'description')
 
 
 admin.site.register(Flag)
