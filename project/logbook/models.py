@@ -121,7 +121,7 @@ class Event(models.Model):
     logbook = models.ForeignKey(Logbook, on_delete=models.CASCADE)
     event_date = models.DateField(help_text="Please use the following format: YYYY-MM-DD.")
     description = models.TextField(max_length=1000)
-    invalid_data = models.BooleanField(default=False)
+    invalid = models.BooleanField(default=False)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
     flags = models.ManyToManyField(Flag, blank=True)
@@ -131,11 +131,13 @@ class Event(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if Event.objects.filter(event_date=self.event_date).count() > 0:
+        if not self.name:
+            print('not name')
             n = Event.objects.filter(event_date=self.event_date).count()
+            print('n', n)
+            self.name = self.logbook.name + " " + str(self.event_date) + " " + f"{n:02d}"
         else:
-            n = 0
-        self.name = self.logbook.name + " " + str(self.event_date) + " " + f"{n:02d}"
+            self.name = self.name
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
