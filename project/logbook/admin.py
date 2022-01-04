@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
-import nested_admin
 
 from .models import Instrument, InstrumentFile,\
                     Station, StationFile,\
@@ -44,9 +43,12 @@ class EventFileInline(admin.TabularInline):
 
 class EventAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'slug',)
-    list_display = ('name', 'event_date', 'description', 'invalid', 'start_date', 'end_date',)
-    fields = ['event_date', 'description', 'invalid', 'start_date', 'end_date', ]
+    list_display = ('name', 'event_date', 'description', 'revision', 'invalid', 'start_date', 'end_date',)
+    fields = ['logbook', 'event_date', 'description', 'revision', 'invalid', 'start_date', 'end_date', ]
     inlines = [EventFileInline]
+
+    class Media:
+        js = ('/static/admin/js/hide_attribute.js',)
 
 
 class EventInline(admin.TabularInline):
