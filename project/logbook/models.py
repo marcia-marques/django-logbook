@@ -63,7 +63,7 @@ class StationFile(models.Model):
 
 class Campaign(models.Model):
     name = models.CharField(max_length=250, blank=True)
-    station = models.ForeignKey(Station, on_delete=models.CASCADE)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE, blank=True)
     instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE)
     date = models.DateField(help_text="Please use the following format: YYYY-MM-DD.", null=True)
     mobile_campaign = models.BooleanField(default=False)
@@ -121,6 +121,7 @@ class Event(models.Model):
     logbook = models.ForeignKey(Logbook, on_delete=models.CASCADE)
     event_date = models.DateField(help_text="Please use the following format: YYYY-MM-DD.")
     description = models.TextField(max_length=1000)
+    revision = models.BooleanField(default=False)
     invalid = models.BooleanField(default=False)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
@@ -131,10 +132,13 @@ class Event(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        qs = Event.objects.filter(event_date=self.event_date)
+        if not qs:
+            n = 1
+        else:
+            my_list = ([int(str(event)[-2:]) for event in qs])
+            n = sorted(my_list)[-1] + 1
         if not self.name:
-            print('not name')
-            n = Event.objects.filter(event_date=self.event_date).count()
-            print('n', n)
             self.name = self.logbook.name + " " + str(self.event_date) + " " + f"{n:02d}"
         else:
             self.name = self.name
@@ -144,6 +148,7 @@ class Event(models.Model):
 
 def event_file_path(instance, filename):
     ext = filename.split('.')[-1]
+    # add random number
     filename = "files/event/%s.%s" % (instance.event.name, ext)
     return filename
 
