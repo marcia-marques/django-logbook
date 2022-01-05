@@ -121,11 +121,11 @@ class Event(models.Model):
     logbook = models.ForeignKey(Logbook, on_delete=models.CASCADE)
     event_date = models.DateField(help_text="Please use the following format: YYYY-MM-DD.")
     description = models.TextField(max_length=1000)
-    revision = models.BooleanField(default=False)
     invalid = models.BooleanField(default=False)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    flags = models.ManyToManyField(Flag, blank=True)
+    flags = models.ForeignKey(Flag, on_delete=models.CASCADE, null=True, blank=True)
+    revised = models.BooleanField(default=False)
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
