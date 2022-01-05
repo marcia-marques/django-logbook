@@ -45,6 +45,7 @@ class EventAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'slug',)
     list_display = ('name', 'event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised')
     fields = ['logbook', 'event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised']
+    list_filter = ('logbook', 'event_date', 'invalid', 'revised', 'flags')
     inlines = [EventFileInline]
 
     class Media:
@@ -53,7 +54,7 @@ class EventAdmin(admin.ModelAdmin):
 
 class EventInline(admin.TabularInline):
     model = Event
-    fields = ['event_date', 'description', 'invalid', 'start_date', 'end_date', ]
+    fields = ['event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised']
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 6, 'cols': 40})},
     }
