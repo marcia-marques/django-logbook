@@ -63,10 +63,11 @@ class StationFile(models.Model):
 
 class Campaign(models.Model):
     name = models.CharField(max_length=250, blank=True)
-    station = models.ForeignKey(Station, on_delete=models.CASCADE, blank=True)
+    station = models.ForeignKey(Station, on_delete=models.CASCADE, blank=True, null=True)
     instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE)
     date = models.DateField(help_text="Please use the following format: YYYY-MM-DD.", null=True)
     mobile_campaign = models.BooleanField(default=False)
+    place = models.CharField(max_length=250, null=True, blank=True)
     description = models.TextField(max_length=1000)
     slug = models.SlugField(unique=True, blank=True)
 
@@ -74,9 +75,14 @@ class Campaign(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.name = self.station.name + " " + self.instrument.name + " " + str(self.date).replace('-', '')[:-2]
-        self.slug = slugify(self.name)
-        return super().save(*args, **kwargs)
+        if self.mobile_campaign:
+            self.name = self.instrument.name + " " + self.place + " " + str(self.date).replace('-', '')
+            self.slug = slugify(self.name)
+            return super().save(*args, **kwargs)
+        else:
+            self.name = self.station.name + " " + self.instrument.name + " " + str(self.date).replace('-', '')[:-2]
+            self.slug = slugify(self.name)
+            return super().save(*args, **kwargs)
 
 
 class CampaignFile(models.Model):

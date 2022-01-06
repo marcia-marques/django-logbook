@@ -36,6 +36,9 @@ class CampaignAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'slug',)
     inlines = [CampaignFileInline]
 
+    class Media:
+        js = ('/static/admin/js/hide_attribute_campaign.js',)
+
 
 class EventFileInline(admin.TabularInline):
     model = EventFile
@@ -55,6 +58,7 @@ class EventAdmin(admin.ModelAdmin):
 class EventInline(admin.TabularInline):
     model = Event
     fields = ['event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised']
+    ordering = ['event_date']
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 6, 'cols': 40})},
     }
