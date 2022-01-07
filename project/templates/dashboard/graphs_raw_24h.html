@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+  <h2 class="display-6">{{ campaign.name }} - Raw data 24h</h2>
+  <br>
+    {% if campaign.raw_data_path %}
+    <div align="center">
+
+    <!-- Form -->
+    <div class="col-lg-8 col-md-6 mb-1">
+        <form action="." method="POST">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <!-- Form fields -->
+            <div class="row text-muted" style="font-size: 14px">Choose the day:</div>
+            <div class="input-group input-group-sm">
+              {{ form.days }}
+                <button class="btn btn-sm btn-my-download" type="submit" name="_download"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Download dataframe">
+                    <i class="bi bi-download"></i>
+                </button>
+                <button class="btn btn-sm btn-my-download" type="submit" name="_invalid"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Download dataframe">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </div>
+            <!-- Form fields END -->
+            <!-- Form buttons -->
+            <div class="row">
+            <div class="col">
+                <button style='margin-top:5px;' type="submit" name="_prev" class="btn btn-primary btn-sm"
+                 data-bs-toggle="tooltip" data-bs-placement="bottom" title="Previous file">
+                  <i class="bi bi-arrow-left"></i>
+                </button>
+            </div>
+            <div class="col">
+                <button style='margin-top:5px;' type="submit" name="_submit" class="btn btn-primary btn-sm">
+                  Update
+                </button>
+            </div>
+            <div class="col">
+                <button style='margin-top:5px;' type="submit" name="_next" class="btn btn-primary btn-sm"
+                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Next file">
+                  <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+            </div>
+            <!-- Form buttons END -->
+        </div>
+        </form>
+    </div>
+    <!-- Form END -->
+
+    <!-- Dashboard -->
+        {{div | safe}}
+        {{script | safe}}
+    <!-- Dashboard END -->
+
+    </div>
+
+    {% else %}
+      <ul style="list-style-type:none;font-size:13px">
+        <li>
+          <i class="bi bi-exclamation-lg"></i>
+          No data path defined
+        </li>
+      </ul>
+    {% endif %}
+
+{% endblock %}

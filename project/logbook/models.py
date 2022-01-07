@@ -69,6 +69,9 @@ class Campaign(models.Model):
     mobile_campaign = models.BooleanField(default=False)
     place = models.CharField(max_length=250, null=True, blank=True)
     description = models.TextField(max_length=1000)
+    raw_data_path = models.CharField(max_length=100, blank=True, null=True)
+    raw_var_list = models.CharField(max_length=150, blank=True, null=True)
+    raw_dtypes = models.CharField(max_length=150, blank=True, null=True)
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
