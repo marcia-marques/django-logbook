@@ -63,8 +63,8 @@ class StationFile(models.Model):
 
 class Campaign(models.Model):
     name = models.CharField(max_length=250, blank=True)
-    station = models.ForeignKey(Station, on_delete=models.CASCADE, blank=True, null=True)
-    instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE)
+    station = models.ForeignKey(Station, on_delete=models.SET_NULL, blank=True, null=True)
+    instrument = models.ForeignKey(Instrument, on_delete=models.SET_NULL, blank=True, null=True)
     date = models.DateField(help_text="Please use the following format: YYYY-MM-DD.", null=True)
     mobile_campaign = models.BooleanField(default=False)
     place = models.CharField(max_length=250, null=True, blank=True)

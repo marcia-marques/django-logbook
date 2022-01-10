@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<ul>
+      {% for campaign in campaigns %}
+
+      <li>{{ campaign.name }}
+        <ul>
+            <li>
+              <a href="{% url 'export_logbook_csv' campaign.slug %}">
+                Logbook
+              </a>
+            </li>
+        </ul>
+      </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
