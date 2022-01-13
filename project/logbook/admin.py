@@ -47,7 +47,7 @@ class EventFileInline(admin.TabularInline):
 class EventAdmin(admin.ModelAdmin):
     readonly_fields = ('name', 'slug',)
     list_display = ('name', 'event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised')
-    fields = ['logbook', 'event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised']
+    fields = ['name', 'logbook', 'event_date', 'description', 'invalid', 'start_date', 'end_date', 'flags', 'revised']
     list_filter = ('logbook', 'event_date', 'invalid', 'revised', 'flags')
     inlines = [EventFileInline]
 

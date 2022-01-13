@@ -156,9 +156,14 @@ class Event(models.Model):
 
 
 def event_file_path(instance, filename):
+    qs = EventFile.objects.filter(event=instance.event)
+    if not qs:
+        n = 1
+    else:
+        my_list = ([int(str(event).split('.')[0][-2:]) for event in qs])
+        n = sorted(my_list)[-1] + 1
     ext = filename.split('.')[-1]
-    # add random number
-    filename = "files/event/%s.%s" % (instance.event.name, ext)
+    filename = f"files/event/{instance.event.name}_file{n:02d}.{ext}"
     return filename
 
 
